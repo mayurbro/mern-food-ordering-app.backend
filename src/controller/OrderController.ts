@@ -129,6 +129,7 @@ const createSession = async (
 const stripeWebhookHandler = async (req: Request, res: Response) => {
   let event;
   try {
+    console.log("payment getway");
     const sig = req.headers["stripe-signature"];
     event = STRIPE.webhooks.constructEvent(
       req.body,
