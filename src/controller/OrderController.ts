@@ -142,7 +142,7 @@ const stripeWebhookHandler = async (req: Request, res: Response) => {
   }
   if (event.type === "checkout.session.completed") {
     const order = await Order.findById(event.data.object.metadata?.orderId);
-
+    console.log("metadata", event.data.object.metadata?.orderId);
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
