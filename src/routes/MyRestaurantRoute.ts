@@ -45,4 +45,10 @@ router.put(
   MyRestaurantController.updateRestaurant
 );
 
+router.get(
+  "/order",
+  jwtCheck,
+  parseJwt,
+  MyRestaurantController.getMyRestaurantOrders
+);
 export default router;
