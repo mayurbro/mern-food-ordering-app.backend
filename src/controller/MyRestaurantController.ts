@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import Restaurant from "../models/restaurant";
 import cloudinary from "cloudinary";
 import mongoose from "mongoose";
-import User from "../models/userModel";
+
 import Order from "../models/order";
 
 const getMyRestaurantOrders = async (req: Request, res: Response) => {
