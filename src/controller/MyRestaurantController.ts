@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import Order from "../models/order";
 
 const getMyRestaurantOrders = async (req: Request, res: Response) => {
+  console.log("getOrders");
   try {
     const restaurant = await Restaurant.findOne({ user: req.userId });
     if (!restaurant) {
