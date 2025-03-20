@@ -5,16 +5,46 @@ import mongoose from "mongoose";
 
 import Order from "../models/order";
 
+const updateOrderStatus = async (req: Request, res: Response) => {
+  console.log("updateOrders");
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({ message: "order not found" });
+    }
+    const restaurant = await Restaurant.findById(order.restaurant);
+
+    if (restaurant?.user?._id.toString() !== req.userId) {
+      return res.status(401).send();
+    }
+    order.status = status;
+    await order.save();
+
+    res.status(200).json(order);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "unable to update status" });
+  }
+};
 const getMyRestaurantOrders = async (req: Request, res: Response) => {
   console.log("getOrders");
   try {
     const restaurant = await Restaurant.findOne({ user: req.userId });
+    console.log(restaurant?.restaurantName);
     if (!restaurant) {
       return res.status(404).json({ message: "restaurant not found" });
     }
+    console.log(restaurant._id);
     const orders = await Order.find({ restaurant: restaurant._id })
       .populate("restaurant")
       .populate("user");
+
+    if (orders.length === 0) {
+      console.log("order not found");
+      return res.status(404).json({ message: "order not found" });
+    }
     res.json(orders);
   } catch (error) {
     console.log(error);
@@ -131,4 +161,5 @@ export default {
   getMyRestaurant,
   updateRestaurant,
   getMyRestaurantOrders,
+  updateOrderStatus,
 };
