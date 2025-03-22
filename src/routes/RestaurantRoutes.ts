@@ -21,4 +21,5 @@ router.get(
     .withMessage("Restaurant parameter must be a valid string"),
   RestaurantController.getRestaurant
 );
+router.get("/restaurantslist", RestaurantController.getRestaurants);
 export default router;
