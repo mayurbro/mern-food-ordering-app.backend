@@ -1,16 +1,32 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import User from "../models/userModel";
 
+const getUserData = async (req: Request, res: Response) => {
+  try {
+    const currentUser = await User.findOne({ _id: req.userId });
+    if (!currentUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(currentUser);
+    console.log("getUserData invoked");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Something went wrong" });
+  }
+};
 const createCurrentUser = async (req: Request, res: Response) => {
   // Find the existing user
   // create the new user
   // send user object to the frontend
+  console.log("createCurrentUser invoked");
   try {
     const { auth0Id } = req.body;
+    console.log(auth0Id);
     const existingUser = await User.findOne({ auth0Id });
 
     if (existingUser) {
-      return res.status(200).send();
+      return res.status(200).json({ message: "User already exists" });
     }
 
     const newUser = new User(req.body);
@@ -22,7 +38,6 @@ const createCurrentUser = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Error while creating user" });
   }
 };
-
 const updateCurrentUser = async (req: Request, res: Response) => {
   try {
     const { name, addressLine1, country, city } = req.body;
@@ -42,21 +57,6 @@ const updateCurrentUser = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Error updating user" });
-  }
-};
-
-const getUserData = async (req: Request, res: Response) => {
-  try {
-    const currentUser = await User.findOne({ _id: req.userId });
-    if (!currentUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    res.json(currentUser);
-    console.log("getUserData invoked");
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 export default { createCurrentUser, updateCurrentUser, getUserData };
