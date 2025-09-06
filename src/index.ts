@@ -10,7 +10,7 @@ import orderRoute from "./routes/OrderRoute";
 // connecting database
 mongoose
   .connect(process.env.MONGODB_CONNECTION_STRING as string)
-  .then(() => console.log("Database connected"));
+  .then(() => console.log("Database connected to mongodb"));
 if (!process.env.MONGODB_CONNECTION_STRING) {
   console.error(
     "Error: MONGODB_CONNECTION_STRING is not defined in environment variables."
